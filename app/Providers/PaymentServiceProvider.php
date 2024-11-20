@@ -7,6 +7,7 @@ use App\Services\PaymobPaymentService;
 use App\Services\TapPaymentService;
 use App\Services\MyFatoorahPaymentService;
 use App\Services\PaypalPaymentService;
+use App\Services\MoyasarPaymentService;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -21,8 +22,7 @@ class PaymentServiceProvider extends ServiceProvider
         $this->app->bind(PaymentGatewayInterface::class , TapPaymentService::class);
         $this->app->bind(PaymentGatewayInterface::class , MyFatoorahPaymentService::class);
         $this->app->bind(PaymentGatewayInterface::class , PaypalPaymentService::class);
-
-
+        $this->app->bind(PaymentGatewayInterface::class , MoyasarPaymentService::class);
     }
 
     /**
