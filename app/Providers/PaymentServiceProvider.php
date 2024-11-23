@@ -9,6 +9,8 @@ use App\Services\MyFatoorahPaymentService;
 use App\Services\PaypalPaymentService;
 use App\Services\MoyasarPaymentService;
 use App\Services\ZainCashPaymentService;
+use App\Services\SquarePaymentService;
+use App\Services\StripePaymentService;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -24,7 +26,10 @@ class PaymentServiceProvider extends ServiceProvider
         $this->app->bind(PaymentGatewayInterface::class , MyFatoorahPaymentService::class);
         $this->app->bind(PaymentGatewayInterface::class , PaypalPaymentService::class);
         $this->app->bind(PaymentGatewayInterface::class , MoyasarPaymentService::class);
+        $this->app->bind(PaymentGatewayInterface::class , SquarePaymentService::class);
         $this->app->bind(PaymentGatewayInterface::class , ZainCashPaymentService::class);
+        $this->app->bind(PaymentGatewayInterface::class , StripePaymentService::class);
+
     }
 
     /**

@@ -56,26 +56,19 @@ class ZainCashPaymentService extends BasePaymentService implements PaymentGatewa
      */
     public function callBack(Request $request): bool
     {
-        $data       =  $this->formatDataCallBack();
-        $dataToPost =  $this->formatDataPost($this->generateJwtToken($data));
+        $token      = $request->all()['token'];
+        $dataToPost =  $this->formatDataPost($token);
 
         $response = $this->buildRequest('POST', '/transaction/get', $dataToPost);
-        Storage::put('zain_cash.json', json_encode( $response ));
+        Storage::put('zain_cash.json',
+            json_encode( $response )
+        );
 
-        $dataResponse = $response->getData(true)['data'];
-        if (isset($dataResponse['status']) && in_array($dataResponse['status'] ,  ["success","completed"]))
+        $responseData = $response->getData(true)['data'];
+        if (isset($responseData['status']) && in_array($responseData['status'] ,  ["success","completed"]))
             return true;
 
         return false;
-    }
-
-    /**
-     * Get the current transaction ID.
-     * This method returns the stored transaction ID after a successful payment initiation.
-     */
-    public function getTransactionId(): string
-    {
-        return $this->transactionId;
     }
 
     /**
@@ -117,17 +110,4 @@ class ZainCashPaymentService extends BasePaymentService implements PaymentGatewa
         ];
     }
 
-    /**
-     * Format the data for the callback to ZainCash.
-     * This method prepares the necessary data to verify the callback.
-     */
-    public function formatDataCallBack() : array
-    {
-        return [
-            'id'      => $this->getTransactionId(),
-            'msisdn'  => $this->msisdin,
-            'iat'     => time(),
-            'exp'     => time()+60*60*4
-        ];
-    }
 }
